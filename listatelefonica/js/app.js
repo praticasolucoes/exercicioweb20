@@ -1,1 +1,1 @@
-  angular.module("listatelefonica",["ngMessages"]);
+  angular.module("listatelefonica",["ngMessages"], ['ui.bootstrap']);

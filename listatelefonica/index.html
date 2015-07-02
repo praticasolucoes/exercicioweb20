@@ -6,6 +6,9 @@
 	<link rel="stylesheet" type="text/css" href="css/app.css">
 	<script src="lib/angular.js"></script>
 	<script src="lib/angular-messages.js"></script>
+	<script src="lib/bootstrap.min.js"></script>
+	<script src="lib/ui-bootstrap-tpls-0.13.0.min.js"></script>
+	<script src="lib/jquery-2.1.4.min.js"></script>
 	<script src="js/app.js"></script>
 	<script src="js/controllers/listatelefonicaCtrl.js"></script>
 	<script src="js/services/agendaApi.js"></script>
@@ -22,23 +25,40 @@
           	<th><a href="" ng-click="ordenarPor='nome';direcao=!direcao">nome</a></th>
           	<th><a href="" ng-click="ordenarPor='telefone';direcao=!direcao">telefone</a></th>
 			<th><a href="" ng-click="ordenarPor='operadora';direcao=!direcao">operadora</a></th>
-          	<th></th>
+          	<th>Excluir</th>
           </tr>
           <tr ng-class="{selecionado: contato.selecionado}" ng-repeat="contato in contatos | filter:criterio | orderBy:ordenarPor:direcao">
           	 <td><input class="form-control" type="checkbox" ng-model="contato.selecionado" /></td>
           	 <td>{{contato.nome}}</td>
           	 <td>{{contato.telefone}}</td>
 			 <td>{{contato.operadora.nome}} </td>
-             <td><div style="width: 20px;height:20px;" ng-style="{'background-color':contato.cor}"></div> </td>   
+             <td><button class="btn btn-primary btn-block" ng-click="apagarContato(contato)">Excluir</button> </td>   
           </tr>
    	  </table>
+	      <button class="btn btn-primary btn-block" id="myBtn" ng-click="abreFormulario()" >
+          	Adicionar Contato</button>
+         </form>
    	      <hr/> 
-      
-                 
-   	      <form name="contatoForm">
-          <input class="form-control" type="text" ng-model="contato.nome" name="nome" placeholder="Nome" ng-required="true" ng-minlength="10"/>
+    </div>
+
+	
+	
+	
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog" >
+    <div class="modal-dialog">  
+	   <!-- Modal content-->
+    <div class="modal-content" >
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"> Agenda  Novo Contato</h4>
+      </div>
+      <div class="modal-body">
+	  
+        <form name="contatoForm">
+          <input class="form-control" type="text" ng-model="contato.nome" name="nome" placeholder="Nome" ng-required="true" ng-minlength="10" ng-pattern="/[^a-zA-ZáéíóúàâêôãõüçÁÉÍÓÚÀÂÊÔÃÕÜÇ]/"/>
           <input class="form-control" type="text" ng-model="contato.telefone" name="telefone" placeholder="Telefone" ng-required="true"  ng-pattern="/^\d{4,5}-\d{4}$/"/>
-          <select class="form-control" ng-model="contato.operadora" ng-options="operadora.nome group by operadora.categoria for operadora in operadoras"> 
+          <select class="form-control" ng-required="true"  ng-model="contato.operadora" ng-options="operadora.nome group by operadora.categoria for operadora in operadoras"> 
           	<option value="">Selecione uma operadora</option>
 
           </select>
@@ -48,9 +68,13 @@
 			  <div ng-message="required" class="alert alert-danger" > 
 				Por favor , preencha o nome !
 			  </div>
+			  <div ng-message="pattern" class="alert alert-danger"> 
+				 Não é permitido números no nome
+			  </div>
 			  <div ng-message="minlength" class="alert alert-danger"> 
 				Por favor , o nome é no mínimo 10 caracteres !
 			  </div>
+			  
 		  </div>	  
 		  <div ng-messages="contatoForm.telefone.$error" ng-show="contatoForm.telefone.$dirty">
 			  <div ng-message="required" class="alert alert-danger"> 
@@ -64,12 +88,29 @@
 		  
 		  
           <button class="btn btn-primary btn-block" ng-click="adicionarContato(contato)" ng-disabled="contatoForm.$invalid">
-          	Adicionar Contato</button>
-         <button class="btn btn-danger btn-block" ng-disabled="contatosSelecioados(contatos)" ng-click="apagarContatos(contatos)">
-          	Apagar Contatos</button>
-         </form> 
+          	Salvar Contato</button>
+         </form>
+		 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+	</div>
+	</div>
+	<script>
+      $(document).ready(function(){
+       //$("#myBtn").click(function(){
+       //   $("#myModal").modal();
+       //});
+      });
+</script>  
+	  
+	  
+                 
+   	   
 
 
-   </div>
+   
 </body>
 </html>

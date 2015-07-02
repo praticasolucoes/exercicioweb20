@@ -8,8 +8,8 @@ angular.module("listatelefonica").factory("agendaApi",function($http,config){
    var _getOperadoras  = function () {
        return  $http.get(config.baseUrl + "/contato/operadoras");
    };
-   var _deletaContatos = function (contatos) {
-	   return $http.delete(config.baseUrl + "/contato",contatos);
+   var _deletaContatos = function (contato) {
+	   return $http.delete(config.baseUrl + "/contato/"+ contato.codigo);
    }
    return {
       getContatos: _getContatos,

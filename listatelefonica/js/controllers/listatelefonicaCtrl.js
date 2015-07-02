@@ -1,8 +1,9 @@
-angular.module("listatelefonica").controller("listatelefonicaCtrl",function($scope,agendaApi){
+angular.module("listatelefonica").controller("listatelefonicaCtrl",function($scope,agendaApi,$modal,$log){
            $scope.app ="Lista Telefonica";
 		   $scope.dataAtual = new Date();
            $scope.contatos = [];
            $scope.operadoras = [];
+		   $scope.controleModal = false;
 		   var carregarContatos = function () {
 		      agendaApi.getContatos().success( function(data){
 				 var _alt = data.map(function(contato){
@@ -32,6 +33,11 @@ angular.module("listatelefonica").controller("listatelefonicaCtrl",function($sco
 			   });
                
            };
+		   $scope.apagarContato = function (contato) {
+		       agendaApi.deletaContatos(contato).success(function(data) {
+				  carregarContatos(); 
+			   });
+		   };
            $scope.apagarContatos = function (contatos) {
 			   var  _contatos =  contatos.filter(function(contato) {
                   if (contato.selecionado) return contato ;  
@@ -47,6 +53,10 @@ angular.module("listatelefonica").controller("listatelefonicaCtrl",function($sco
                    return contato.selecionado;
                });
            };
+		   $scope.abreFormulario = function() {
+		      
+               console.log("chamou ");		   
+		   };
 		   carregarContatos();
 		   carregarOperadoras();
 	    });
