@@ -3,66 +3,13 @@
 	<meta charset="UTF-8"
 	<title>Lista Telefonica</title>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="css/app.css">
 	<script src="lib/angular.js"></script>
 	<script src="lib/angular-messages.js"></script>
-	<style>
-       .jumbotron {
-       	  width: 400px;
-       	  text-align:  center;
-       	  margin-left: auto;
-       	  margin-right:  auto;
-       	  margin-top: 20px;
-       }
-       .selecionado {
-       	background-color: yellow;
-       }
-	</style>
-	<script>
-	    var p = angular.module("listatelefonica",["ngMessages"]);
-	    p.controller("listatelefonicaCtrl",function($scope,$http){
-           $scope.app ="Lista Telefonica";
-		   $scope.dataAtual = new Date();
-           $scope.contatos = [
-             {nome: "Pedro", telefone:"88066900",cor:"yellow"},
-             {nome: "Joao", telefone:"880669404",cor:"blue"},
-             {nome: "Maria", telefone:"840404900",cor:"green"}
-           ];
-           $scope.operadoras = [
-            {nome:"Oi",codigo: 10,categoria:"celular"},
-            {nome:"Tim",codigo: 20,categoria:"celular"},
-            {nome:"Vivo",codigo: 30,categoria:"celular"},
-            {nome:"gvt",codigo: 30,categoria:"fixo"},
-            {nome:"embratel",codigo: 30,categoria:"fixo"}
-
-           ];
-		   var carregarContatos = function () {
-		      $http.get("http://localhost:8080/WebService2/agenda").success( function(data){
-				 $scope.contatos = data;
-			  }).error( function(data){
-			     console.log("erro de dados " + data);
-			  
-			  });
-		   };
-           $scope.adicionarContato = function (contato) {
-		       $http.put("http://localhost:8080/WebService2/agenda",contato);
-               delete $scope.contato;
-			   $scope.contatoForm.$setPristine();
-           };
-           $scope.apagarContatos = function (contatos) {
-           	   $scope.contatos =  contatos.filter (function(contato) {
-                  if (!contato.selecionado) return contato ;  
-           	   });
-           };
-           $scope.contatosSelecioados = function (contatos ) {
-               return !contatos.some(function(contato ){
-                   return contato.selecionado;
-               });
-           };
-		   carregarContatos();
-	    });
-	
-		
-	</script>
+	<script src="js/app.js"></script>
+	<script src="js/controllers/listatelefonicaCtrl.js"></script>
+	<script src="js/services/agendaApi.js"></script>
+	<script src="js/value/config.js"></script>
 </head>
 <body ng-controller="listatelefonicaCtrl">
    <div class="jumbotron">
@@ -74,12 +21,14 @@
           	<th>Sel</th>
           	<th><a href="" ng-click="ordenarPor='nome';direcao=!direcao">nome</a></th>
           	<th><a href="" ng-click="ordenarPor='telefone';direcao=!direcao">telefone</a></th>
+			<th><a href="" ng-click="ordenarPor='operadora';direcao=!direcao">operadora</a></th>
           	<th></th>
           </tr>
           <tr ng-class="{selecionado: contato.selecionado}" ng-repeat="contato in contatos | filter:criterio | orderBy:ordenarPor:direcao">
           	 <td><input class="form-control" type="checkbox" ng-model="contato.selecionado" /></td>
           	 <td>{{contato.nome}}</td>
           	 <td>{{contato.telefone}}</td>
+			 <td>{{contato.operadora.nome}} </td>
              <td><div style="width: 20px;height:20px;" ng-style="{'background-color':contato.cor}"></div> </td>   
           </tr>
    	  </table>
@@ -93,6 +42,7 @@
           	<option value="">Selecione uma operadora</option>
 
           </select>
+		  
 		
 		  <div ng-messages="contatoForm.nome.$error" ng-show="contatoForm.nome.$dirty">
 			  <div ng-message="required" class="alert alert-danger" > 
