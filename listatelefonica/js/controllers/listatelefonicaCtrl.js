@@ -3,7 +3,31 @@ angular.module("listatelefonica").controller("listatelefonicaCtrl",function($sco
 		   $scope.dataAtual = new Date();
            $scope.contatos = [];
            $scope.operadoras = [];
-		   $scope.controleModal = false;
+		
+		$scope.items = ['item1', 'item2', 'item3'];
+		   
+	$scope.open = function (contato) {
+   
+    var modalInstance = $modal.open({
+      animation: true ,
+      templateUrl: 'myModalContent.html',
+      controller: 'ModalInstanceCtrl',
+      size: null,
+      resolve: {
+        items: function () {
+          return contato;
+        }
+      }
+    });
+		
+	modalInstance.result.then(function () {
+       carregarContatos();
+    }, function () {
+       
+    });
+  };	
+		
+		
 		   var carregarContatos = function () {
 		      agendaApi.getContatos().success( function(data){
 				 var _alt = data.map(function(contato){
@@ -18,21 +42,7 @@ angular.module("listatelefonica").controller("listatelefonicaCtrl",function($sco
 			  
 			  });
 		   };
-		   var carregarOperadoras = function ()  {
-			   agendaApi.getOperadoras().success( function(data){
-				 $scope.operadoras = data;
-			  }).error( function(data){
-			     console.log("erro de dados " + data);
-			  });
-		   }
-           $scope.adicionarContato = function (contato) {
-		       agendaApi.saveContatos(contato).success (function(data){
-				  delete $scope.contato;
-			      carregarContatos();
-			      $scope.contatoForm.$setPristine();   
-			   });
-               
-           };
+		   
 		   $scope.apagarContato = function (contato) {
 		       agendaApi.deletaContatos(contato).success(function(data) {
 				  carregarContatos(); 
@@ -53,10 +63,37 @@ angular.module("listatelefonica").controller("listatelefonicaCtrl",function($sco
                    return contato.selecionado;
                });
            };
-		   $scope.abreFormulario = function() {
-		      
-               console.log("chamou ");		   
-		   };
 		   carregarContatos();
-		   carregarOperadoras();
 	    });
+		
+angular.module('listatelefonica').controller('ModalInstanceCtrl', function ($scope, $modalInstance,agendaApi, items) {
+
+  $scope.contato = items;
+ 
+  
+  var carregarOperadoras = function ()  {
+			   agendaApi.getOperadoras().success( function(data){
+				 $scope.operadoras = data;
+			  }).error( function(data){
+			     console.log("erro de dados " + data);
+			  });
+		   }
+  $scope.adicionarContato = function (contato) {
+		       agendaApi.saveContatos(contato).success (function(data){
+				  delete $scope.contato;
+			       $modalInstance.close();
+			      
+			   });
+               
+           };
+  $scope.ok = function () {
+    $modalInstance.close();
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+  carregarOperadoras();
+  
+});		
+		
