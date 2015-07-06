@@ -4,7 +4,7 @@ angular.module("listatelefonica").controller("listatelefonicaCtrl",function($sco
            $scope.contatos = [];
            $scope.operadoras = [];
 		
-		$scope.items = ['item1', 'item2', 'item3'];
+		
 		   
 	$scope.open = function (contato) {
    
@@ -69,31 +69,37 @@ angular.module("listatelefonica").controller("listatelefonicaCtrl",function($sco
 angular.module('listatelefonica').controller('ModalInstanceCtrl', function ($scope, $modalInstance,agendaApi, items) {
 
   $scope.contato = items;
- 
+  $scope.titulo = "Novo Contato";
   
+  if ( items != undefined ) {
+     $scope.titulo = "Alterar Contato";
+  }
   var carregarOperadoras = function ()  {
 			   agendaApi.getOperadoras().success( function(data){
 				 $scope.operadoras = data;
 			  }).error( function(data){
 			     console.log("erro de dados " + data);
 			  });
-		   }
+		   };
   $scope.adicionarContato = function (contato) {
+            if ( items == undefined ) {  
 		       agendaApi.saveContatos(contato).success (function(data){
 				  delete $scope.contato;
 			       $modalInstance.close();
-			      
 			   });
-               
+             } else {
+		       agendaApi.alteraContato(contato).success (function(data){
+				  delete $scope.contato;
+			       $modalInstance.close();
+			   });
+             }
            };
   $scope.ok = function () {
     $modalInstance.close();
   };
-
   $scope.cancel = function () {
     $modalInstance.dismiss('cancel');
   };
   carregarOperadoras();
-  
 });		
 		

@@ -20,7 +20,7 @@
   <script type="text/ng-template" id="myModalContent.html" >
       <div class="modal-header">
         <button type="button" class="close" ng-click="cancel()" >&times;</button>
-        <h4 class="modal-title"> Agenda  Novo Contato</h4>
+        <h4 class="modal-title"> Agenda {{titulo}} </h4>
       </div>
       <div class="modal-body">
 	  
@@ -29,10 +29,9 @@
           <input class="form-control" type="text" ng-model="contato.telefone" name="telefone" placeholder="Telefone" ng-required="true"  ng-pattern="/^\d{4,5}-\d{4}$/"/>
           <select class="form-control" ng-required="true"  ng-model="contato.operadora" ng-options="operadora.nome group by operadora.categoria for operadora in operadoras"> 
           	<option value="">Selecione uma operadora</option>
-
           </select>
-		  
-		
+
+	
 		  <div ng-messages="contatoForm.nome.$error" ng-show="contatoForm.nome.$dirty">
 			  <div ng-message="required" class="alert alert-danger" > 
 				Por favor , preencha o nome !
