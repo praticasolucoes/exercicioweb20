@@ -27,7 +27,7 @@
         <form name="contatoForm">
           <input class="form-control" type="text" ng-model="contato.nome" name="nome" placeholder="Nome" ng-required="true" ng-minlength="10" ng-pattern="/[^a-zA-ZáéíóúàâêôãõüçÁÉÍÓÚÀÂÊÔÃÕÜÇ]/"/>
           <input class="form-control" type="text" ng-model="contato.telefone" name="telefone" placeholder="Telefone" ng-required="true"  ng-pattern="/^\d{4,5}-\d{4}$/"/>
-          <select class="form-control" ng-required="true"  ng-model="contato.operadora" ng-options="operadora.nome group by operadora.categoria for operadora in operadoras"> 
+          <select class="form-control" ng-required="true"  ng-model="contato.operadora" ng-options="operadora.nome group by operadora.categoria for operadora in operadoras track by operadora.codigo"> 
           	<option value="">Selecione uma operadora</option>
           </select>
 
@@ -52,9 +52,6 @@
 				 Telefone é no padrao ddddd-dddd
 			  </div>
 		  </div>
-		  
-		  
-		  
           <button class="btn btn-primary btn-block" ng-click="adicionarContato(contato)" ng-disabled="contatoForm.$invalid">
           	Salvar Contato</button>
          </form>
