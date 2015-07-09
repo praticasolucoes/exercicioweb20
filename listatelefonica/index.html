@@ -13,6 +13,8 @@
 	<script src="js/controllers/listatelefonicaCtrl.js"></script>
 	<script src="js/services/agendaApi.js"></script>
 	<script src="js/value/config.js"></script>
+	<script src="js/directives/painel.js"></script>
+	<script src="js/directives/telefone.js"></script>
 </head>
 <body ng-controller="listatelefonicaCtrl">
 
@@ -26,7 +28,7 @@
 	  
         <form name="contatoForm">
           <input class="form-control" type="text" ng-model="contato.nome" name="nome" placeholder="Nome" ng-required="true" ng-minlength="10" ng-pattern="/[^a-zA-ZáéíóúàâêôãõüçÁÉÍÓÚÀÂÊÔÃÕÜÇ]/"/>
-          <input class="form-control" type="text" ng-model="contato.telefone" name="telefone" placeholder="Telefone" ng-required="true"  ng-pattern="/^\d{4,5}-\d{4}$/"/>
+          <input class="form-control" type="text" ng-model="contato.telefone" telefone name="telefone" placeholder="Telefone" ng-required="true"  ng-pattern="/^\d{4,5}-\d{4}$/"/>
           <select class="form-control" ng-required="true"  ng-model="contato.operadora" ng-options="operadora.nome group by operadora.categoria for operadora in operadoras track by operadora.codigo"> 
           	<option value="">Selecione uma operadora</option>
           </select>
@@ -68,6 +70,12 @@
    	  <h3 ng-bind="app"></h3>
 	  <h4>{{dataAtual | date:'dd/MM/yyyy hh:mm'}} </h4>
    	  <input type="text" ng-model="criterio" placeholder="Busque por um nome ou telefone" />
+	  
+	  <!--<ng-painel mensagem="aconteceu um problema" > </ng-painel>-->
+	  
+	  
+	  
+	  
 	  <table ng-show="contatos.length > 0"class="table">
           <tr>
           	<th>Sel</th>
